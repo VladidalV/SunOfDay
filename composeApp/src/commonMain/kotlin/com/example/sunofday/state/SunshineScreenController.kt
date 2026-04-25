@@ -12,11 +12,16 @@ class SunshineScreenController {
         private set
 
     fun onButtonClick(scope: CoroutineScope) {
-        if (state is SunshineScreenState.Loading) return
-        state = SunshineScreenState.Loading
-        scope.launch {
-            delay(2000L)
-            state = SunshineScreenState.Result
+        when (state) {
+            is SunshineScreenState.Loading -> return
+            is SunshineScreenState.Result  -> state = SunshineScreenState.Initial
+            is SunshineScreenState.Initial -> {
+                state = SunshineScreenState.Loading
+                scope.launch {
+                    delay(2000L)
+                    state = SunshineScreenState.Result
+                }
+            }
         }
     }
 }

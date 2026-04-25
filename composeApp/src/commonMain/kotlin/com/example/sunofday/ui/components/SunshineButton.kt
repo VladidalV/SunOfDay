@@ -28,7 +28,7 @@ fun SunshineButton(
     val label = when (state) {
         is SunshineScreenState.Initial -> "Узнать"
         is SunshineScreenState.Loading -> "Секундочку…"
-        is SunshineScreenState.Result  -> "Ещё раз"
+        is SunshineScreenState.Result  -> "Назад"
     }
 
     Button(
