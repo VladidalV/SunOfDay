@@ -1,6 +1,7 @@
 package com.example.sunofday.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -34,6 +35,7 @@ import com.example.sunofday.platform.RequestCameraPermission
 import com.example.sunofday.state.SunshineScreenController
 import com.example.sunofday.state.SunshineScreenState
 import com.example.sunofday.ui.components.CuteDecorations
+import com.example.sunofday.ui.components.PesGifImage
 import com.example.sunofday.ui.components.SunshineButton
 import com.example.sunofday.ui.components.SunshineCircle
 
@@ -103,6 +105,17 @@ fun SunshineScreen() {
                 state = state,
                 onClick = { controller.onButtonClick(scope) }
             )
+        }
+
+        AnimatedVisibility(
+            visible = state is SunshineScreenState.Result,
+            enter = fadeIn(tween(400)),
+            exit = fadeOut(tween(300)),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(30.dp)
+        ) {
+            PesGifImage(modifier = Modifier.size(120.dp))
         }
     }
 }
