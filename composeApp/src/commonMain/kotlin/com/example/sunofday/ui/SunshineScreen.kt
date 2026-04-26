@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sunofday.platform.RequestCameraPermission
+import com.example.sunofday.platform.rememberMagicSoundPlayer
 import com.example.sunofday.state.SunshineScreenController
 import com.example.sunofday.state.SunshineScreenState
 import com.example.sunofday.ui.components.CuteDecorations
@@ -58,6 +59,7 @@ fun SunshineScreen() {
     val controller = remember { SunshineScreenController() }
     val scope = rememberCoroutineScope()
     val state = controller.state
+    val playMagicSound = rememberMagicSoundPlayer()
 
     val screenWidthDp = with(LocalDensity.current) {
         LocalWindowInfo.current.containerSize.width.toDp()
@@ -112,7 +114,10 @@ fun SunshineScreen() {
 
             SunshineButton(
                 state = state,
-                onClick = { controller.onButtonClick(scope) }
+                onClick = {
+                    if (state is SunshineScreenState.Initial) playMagicSound()
+                    controller.onButtonClick(scope)
+                }
             )
         }
 
