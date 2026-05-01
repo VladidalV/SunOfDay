@@ -85,16 +85,23 @@ fun SunshineScreen() {
                     else -> "Узнай, кто сегодня\nсолнышко дня"
                 },
                 transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(300)) },
-                label = "titleAnim"
+                label = "titleAnim",
+                modifier = Modifier.height(80.dp)
             ) { title ->
-                Text(
-                    text = title,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextBrown,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 34.sp
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = TextBrown,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 34.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(36.dp))
