@@ -5,6 +5,7 @@ package com.example.sunofday.platform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import kotlinx.cinterop.ExperimentalForeignApi
+import platform.AVFoundation.AVAuthorizationStatusAuthorized
 import platform.AVFoundation.AVAuthorizationStatusNotDetermined
 import platform.AVFoundation.AVCaptureDevice
 import platform.AVFoundation.AVMediaTypeVideo
@@ -20,4 +21,9 @@ actual fun RequestCameraPermission() {
         }
         onDispose { }
     }
+}
+
+@Composable
+actual fun rememberHasCameraPermission(): Boolean {
+    return AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) == AVAuthorizationStatusAuthorized
 }

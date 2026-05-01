@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -21,10 +23,15 @@ import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +44,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sunofday.platform.RequestCameraPermission
+import com.example.sunofday.platform.rememberHasCameraPermission
 import com.example.sunofday.platform.rememberMagicSoundPlayer
 import com.example.sunofday.state.SunshineScreenController
 import com.example.sunofday.state.SunshineScreenState
@@ -44,6 +52,7 @@ import com.example.sunofday.ui.components.CuteDecorations
 import com.example.sunofday.ui.components.GifImage
 import com.example.sunofday.ui.components.SunshineButton
 import com.example.sunofday.ui.components.SunshineCircle
+import kotlinx.coroutines.delay
 
 private val BgTop     = Color(0xFFFFF8F0)
 private val BgBottom  = Color(0xFFFFEDD8)
@@ -60,6 +69,16 @@ fun SunshineScreen() {
     val scope = rememberCoroutineScope()
     val state = controller.state
     val playMagicSound = rememberMagicSoundPlayer()
+    val hasCameraPermission = rememberHasCameraPermission()
+
+    var showPermissionWarning by remember { mutableStateOf(false) }
+
+    LaunchedEffect(showPermissionWarning) {
+        if (showPermissionWarning) {
+            delay(2500)
+            showPermissionWarning = false
+        }
+    }
 
     val screenWidthDp = with(LocalDensity.current) {
         LocalWindowInfo.current.containerSize.width.toDp()
@@ -122,8 +141,12 @@ fun SunshineScreen() {
             SunshineButton(
                 state = state,
                 onClick = {
-                    if (state is SunshineScreenState.Initial) playMagicSound()
-                    controller.onButtonClick(scope)
+                    if (state is SunshineScreenState.Initial && !hasCameraPermission) {
+                        showPermissionWarning = true
+                    } else {
+                        if (state is SunshineScreenState.Initial) playMagicSound()
+                        controller.onButtonClick(scope)
+                    }
                 }
             )
         }
@@ -155,6 +178,30 @@ fun SunshineScreen() {
             path = "files/confetti.gif",
             gifSize = screenWidthDp.value.toInt(),
         )
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 32.dp, vertical = 16.dp),
+            visible = showPermissionWarning,
+            enter = fadeIn(tween(250)) + slideInVertically { it / 2 },
+            exit = fadeOut(tween(250)) + slideOutVertically { it / 2 },
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(TextBrown.copy(alpha = 0.92f), RoundedCornerShape(16.dp))
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Разреши доступ к камере\nв настройках телефона",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp
+                )
+            }
+        }
     }
 }
 
