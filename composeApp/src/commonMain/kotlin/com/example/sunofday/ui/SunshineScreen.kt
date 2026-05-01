@@ -104,7 +104,7 @@ fun SunshineScreen() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             Box(contentAlignment = Alignment.Center) {
                 CuteDecorations(
@@ -117,7 +117,7 @@ fun SunshineScreen() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(52.dp))
 
             SunshineButton(
                 state = state,
