@@ -13,6 +13,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>Солнышко дня</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Чтобы увидеть, кто сегодня солнышко дня! ☀️</string>
 </dict>
